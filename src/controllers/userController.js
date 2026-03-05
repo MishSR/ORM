@@ -15,23 +15,30 @@ export const getUserById = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-    const { name, authorId } = req.body;
+    const { name, age, address } = req.body;
     if (!name) {
         return res.status(400).json({ error: "Name of the User is required" });
-    const User = await User.create({ name, authorId });
-    res.status(201).json({message: "User created successfully", User});
     }
+    if (!age) {
+        return res.status(400).json({ error: "Age of the User is required" });
+    }
+    if (!address) {
+        return res.status(400).json({ error: "Address of the User is required" });
+    }
+    const User = await User.create({ name, age, address });
+    res.status(201).json({message: "User created successfully", User});
 };
 
 export const updateUser = async (req, res) => {
-    const { name, authorId } = req.body;
+    const { name, age, address } = req.body;
     const User = await User.findByPk(req.params.id);
     if (!User) {
         return res.status(404).json({ message: "User not found" });
     User.name = name || User.name;
-    User.authorId = authorId || User.authorId;      
+    User.age = age || User.age;
+    User.address = address || User.address;      
     await User.save();
-    res.json({ message: "User updated successfully", User });
+    res.json({ message: "User updated successfully", User });   
     }
 };
 
