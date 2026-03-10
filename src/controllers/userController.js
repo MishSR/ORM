@@ -1,3 +1,4 @@
+import { Book } from "../models";
 import User from "../models/user";
 
 
@@ -7,7 +8,18 @@ export const getUsers = async (req, res) => {
 };
 
 export const getUserById = async (req, res) => {
-    const User = await User.findByPk(req.params.id);
+    const User = await User.findByPk(req.params.id,
+      {   include: [{ model: Review,
+        as: "reviews" },
+        { model: Book,
+        as: "book" },
+        { model: Loan,
+        as: "loans",
+    include: { model: Book,
+        as: "book" }
+     }],
+    }
+    );
     if (!User) {
         return res.status(404).json({ message: "User not found" });
     }

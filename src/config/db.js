@@ -1,9 +1,9 @@
 import { Sequelize } from "sequelize";
 
-const sequelize = new Sequelize("Biblioteca", "root", "password", {
-  host: "localhost",
-  dialect: "mysql",
+const sequelize = new Sequelize("biblioteca", "userTest", "Password123", {
+  host: "localhost", 
+    dialect: "mysql", 
 });
 
-export default sequelize;
 
+export default sequelize;

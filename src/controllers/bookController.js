@@ -1,13 +1,22 @@
 import Book from '../models/book.js';
+import { Author, Loan } from '../models/index.js';
 
 
 export const getBooks = async (req, res) => {
-    const books = await Book.findAll();
+    const books = await Book.findAll({include: [{ model: Author, 
+        as: "author" }]});
     res.json(books);
 };
 
 export const getBookById = async (req, res) => {
-    const book = await Book.findByPk(req.params.id);
+    const book = await Book.findByPk(req.params.id, {
+        include: [{ model: Author, 
+            as: "author" },
+        {model: Review,
+        as: "reviews"},
+        { model: Loan, 
+            as: "loans" }]     
+    });
     if (!book) {
         return res.status(404).json({ message: "Book not found" });
     }

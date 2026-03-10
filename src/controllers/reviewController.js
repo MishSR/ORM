@@ -1,7 +1,12 @@
 import Review from "../models/review";
 
 export const getReviews = async (req, res) => {
-    const Reviews = await Review.findAll();
+    const Reviews = await Review.findAll({ 
+        includes: [{ model: User,
+        as: "user" },
+        { model: Book,
+        as: "book" }]
+    });
     res.json(Reviews);
 };
 

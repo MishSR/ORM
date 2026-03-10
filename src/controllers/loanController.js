@@ -7,7 +7,13 @@ export const getLoans = async (req, res) => {
 };
 
 export const getLoanById = async (req, res) => {
-    const Loan = await Loan.findByPk(req.params.id);
+    const Loan = await Loan.findByPk(req.params.id,{
+        include: [{ model: User,
+        as: "user" },
+        { model: Book,
+        as: "book" }]
+    }
+    );
     if (!Loan) {
         return res.status(404).json({ message: "Loan not found" });
     }
