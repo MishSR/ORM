@@ -1,29 +1,22 @@
-import { Book } from "../models";
-import User from "../models/user";
-
+import User from "../models/user.js";
+import { Book, Review, Loan } from "../models/index.js";
 
 export const getUsers = async (req, res) => {
-    const Users = await User.findAll();
-    res.json(Users);
+    const users = await User.findAll();
+    res.json(users);
 };
 
 export const getUserById = async (req, res) => {
-    const User = await User.findByPk(req.params.id,
-      {   include: [{ model: Review,
-        as: "reviews" },
-        { model: Book,
-        as: "book" },
-        { model: Loan,
-        as: "loans",
-    include: { model: Book,
-        as: "book" }
-     }],
-    }
-    );
-    if (!User) {
+    const user = await User.findByPk(req.params.id, {
+        include: [
+            { model: Review, as: "reviews" },
+            { model: Loan, as: "loans", include: [{ model: Book, as: "book" }] }
+        ]
+    });
+    if (!user) {
         return res.status(404).json({ message: "User not found" });
     }
-    res.json(User);
+    res.json(user);
 };
 
 export const createUser = async (req, res) => {
@@ -37,29 +30,29 @@ export const createUser = async (req, res) => {
     if (!address) {
         return res.status(400).json({ error: "Address of the User is required" });
     }
-    const User = await User.create({ name, age, address });
-    res.status(201).json({message: "User created successfully", User});
+    const user = await User.create({ name, age, address });
+    res.status(201).json({ message: "User created successfully", user });
 };
 
 export const updateUser = async (req, res) => {
     const { name, age, address } = req.body;
-    const User = await User.findByPk(req.params.id);
-    if (!User) {
+    const user = await User.findByPk(req.params.id);
+    if (!user) {
         return res.status(404).json({ message: "User not found" });
-    User.name = name || User.name;
-    User.age = age || User.age;
-    User.address = address || User.address;      
-    await User.save();
-    res.json({ message: "User updated successfully", User });   
     }
+    user.name = name || user.name;
+    user.age = age || user.age;
+    user.address = address || user.address;
+    await user.save();
+    res.json({ message: "User updated successfully", user });
 };
 
 export const deleteUser = async (req, res) => {
-    const User = await User.findByPk(req.params.id);
-    if (!User) {
+    const user = await User.findByPk(req.params.id);
+    if (!user) {
         return res.status(404).json({ message: "User not found" });
     }
-    await User.destroy();
+    await user.destroy();
     res.json({ message: "User deleted successfully" });
 };
 

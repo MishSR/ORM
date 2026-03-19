@@ -1,21 +1,22 @@
-import Review from "../models/review";
+import Review from "../models/review.js";
+import { User, Book } from "../models/index.js";
 
 export const getReviews = async (req, res) => {
-    const Reviews = await Review.findAll({ 
-        includes: [{ model: User,
-        as: "user" },
-        { model: Book,
-        as: "book" }]
+    const reviews = await Review.findAll({
+        include: [
+            { model: User, as: "user" },
+            { model: Book, as: "book" }
+        ]
     });
-    res.json(Reviews);
+    res.json(reviews);
 };
 
 export const getReviewById = async (req, res) => {
-    const Review = await Review.findByPk(req.params.id);
-    if (!Review) {
+    const review = await Review.findByPk(req.params.id);
+    if (!review) {
         return res.status(404).json({ message: "Review not found" });
     }
-    res.json(Review);
+    res.json(review);
 };
 
 export const createReview = async (req, res) => {
@@ -29,29 +30,29 @@ export const createReview = async (req, res) => {
     if (!comment) {
         return res.status(400).json({ error: "Comment is required" });
     }
-    const Review = await Review.create({ userId, bookId, comment });
-    res.status(201).json({message: "Review created successfully", Review});
+    const review = await Review.create({ userId, bookId, comment });
+    res.status(201).json({ message: "Review created successfully", review });
 };
 
 export const updateReview = async (req, res) => {
     const { userId, bookId, comment } = req.body;
-    const Review = await Review.findByPk(req.params.id);
-    if (!Review) {
+    const review = await Review.findByPk(req.params.id);
+    if (!review) {
         return res.status(404).json({ message: "Review not found" });
     }
-    Review.userId = userId || Review.userId;
-    Review.bookId = bookId || Review.bookId;
-    Review.comment = comment || Review.comment;
-    await Review.save();
-    res.json({ message: "Review updated successfully", Review });
+    review.userId = userId || review.userId;
+    review.bookId = bookId || review.bookId;
+    review.comment = comment || review.comment;
+    await review.save();
+    res.json({ message: "Review updated successfully", review });
 };
 
 export const deleteReview = async (req, res) => {
-    const Review = await Review.findByPk(req.params.id);
-    if (!Review) {
+    const review = await Review.findByPk(req.params.id);
+    if (!review) {
         return res.status(404).json({ message: "Review not found" });
     }
-    await Review.destroy();
+    await review.destroy();
     res.json({ message: "Review deleted successfully" });
 };
 

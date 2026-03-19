@@ -1,6 +1,6 @@
 import express from "express";
 import routes from "./src/routes/index.js";
-import {sequelize} from "./src/config/db.js";
+import {sequelize} from "./src/models/index.js";
 
 const app = express();
 

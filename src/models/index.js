@@ -1,45 +1,55 @@
 import sequelize from "../config/db.js";
-import Author from "./author";
-import Book from "./book";
+import Author from "./author.js";
+import Book from "./book.js";
 import User from "./user.js";
 import Loan from "./loan.js";
 import Review from "./review.js";
 
 Author.hasMany(Book, { 
-    foreignKey: authorId,
+    foreignKey: "authorId",
     as: "books",});
 
 Book.belongsTo(Author, {
-    foreignKey: authorId,
+    foreignKey: "authorId",
     as: "author",});
 
 User.hasMany(Review, {
-    foreignKey: userId,
+    foreignKey: "userId",
     as: "reviews",
 });
 
 Review.belongsTo(User, {
-    foreignKey: userId,
+    foreignKey: "userId",
     as: "user",
 });
 
 User.hasMany(Loan, {
-    foreignKey: userId,
+    foreignKey: "userId",
     as: "loans",
 });
 
-User.hasMany(Review, {
-    foreignKey: bookId,
-    as: "reviews",
+Loan.belongsTo(User, {
+    foreignKey: "userId",
+    as: "user",
 });
 
 Book.hasMany(Loan, {
-    foreignKey: bookId,
+    foreignKey: "bookId",
     as: "loans",
 });
 
 Loan.belongsTo(Book, {
-    foreignKey: bookId,
+    foreignKey: "bookId",
+    as: "book",
+});
+
+Book.hasMany(Review, {
+    foreignKey: "bookId",
+    as: "reviews",
+});
+
+Review.belongsTo(Book, {
+    foreignKey: "bookId",
     as: "book",
 });
 

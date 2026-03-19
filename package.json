@@ -1,9 +1,10 @@
 {
   "name": "orm",
   "version": "1.0.0",
-  "main": "index.js",
+  "type": "module",
+  "main": "server.js",
   "scripts": {
-    "dev": "nodemon index.js",
+    "dev": "nodemon server.js",
     "start": "node server.js"
   },
   "keywords": [],
